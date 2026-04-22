@@ -5,7 +5,8 @@
       "Bash(npm start:*)",
       "Bash(timeout 15 node:*)",
       "Bash(ssh:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(grep:*)"
     ]
   }
 }
