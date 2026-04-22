@@ -1,4 +1,4 @@
-import pool from './src/config/database.js';
+import pool from '../src/config/database.js';
 
 console.log('🔄 Intentando conectar a PostgreSQL...\n');
 console.log('Detalles de conexión:');
