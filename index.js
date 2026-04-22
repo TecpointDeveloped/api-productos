@@ -1,6 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
 import { testDatabaseConnection } from './src/utils/testConnection.js';
+import productRoutes from './src/routes/productRoutes.js';
 
 dotenv.config();
 
@@ -16,9 +17,16 @@ app.get('/', (req, res) => {
   res.json({
     mensaje: 'API funcionando correctamente',
     estado: 'online',
-    version: '1.0.0'
+    version: '1.0.0',
+    endpoints: {
+      productos: '/api/products',
+      buscarPorSerie: '/api/products/serie/:ite_serie'
+    }
   });
 });
+
+// Rutas de la API
+app.use('/api/products', productRoutes);
 
 // Iniciar servidor
 const startServer = async () => {
