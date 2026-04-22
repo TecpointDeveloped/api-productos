@@ -28,32 +28,38 @@ app.get('/', (req, res) => {
 // Rutas de la API
 app.use('/api/products', productRoutes);
 
-// Iniciar servidor
-const startServer = async () => {
-  try {
-    // Probar conexión a la base de datos
-    console.log('🔄 Verificando conexión a la base de datos...\n');
-    const connectionSuccess = await testDatabaseConnection();
+// Iniciar servidor - Solo en desarrollo local
+if (process.env.NODE_ENV !== 'production') {
+  const startServer = async () => {
+    try {
+      console.log('🔄 Verificando conexión a la base de datos...\n');
+      const connectionSuccess = await testDatabaseConnection();
 
-    if (connectionSuccess) {
-      app.listen(PORT, () => {
-        console.log(`\n🚀 Servidor corriendo en http://localhost:${PORT}`);
-        console.log(`📝 Modo: ${process.env.NODE_ENV}`);
-      });
-    } else {
-      console.error('\n⚠️  No se puede iniciar el servidor sin conexión a la BD');
+      if (connectionSuccess) {
+        app.listen(PORT, () => {
+          console.log(`\n🚀 Servidor corriendo en http://localhost:${PORT}`);
+          console.log(`📝 Modo: ${process.env.NODE_ENV}`);
+        });
+      } else {
+        console.error('\n⚠️  No se puede iniciar el servidor sin conexión a la BD');
+        process.exit(1);
+      }
+    } catch (error) {
+      console.error('Error al iniciar el servidor:', error);
       process.exit(1);
     }
-  } catch (error) {
-    console.error('Error al iniciar el servidor:', error);
-    process.exit(1);
-  }
-};
+  };
 
-startServer();
+  startServer();
+}
+
+// Exportar para Vercel
+export default app;
 
 // Manejo de errores no capturados
 process.on('unhandledRejection', (err) => {
   console.error('Error no manejado:', err);
-  process.exit(1);
+  if (process.env.NODE_ENV !== 'production') {
+    process.exit(1);
+  }
 });
